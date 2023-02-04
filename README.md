@@ -1,10 +1,10 @@
 # pd-remote
 
-This is a simplified and unified version of the Pd remote control helpers that I've been distributing with various Pd externals such as [pd-faustgen2](https://github.com/agraef/pd-faustgen) and [pd-lua](https://github.com/agraef/pd-lua) over the years. The present implementation will work with any of these and replaces the more specialized versions. It takes the form of a Pd abstraction pd-remote.pd and an accompanying pd-remote.el elisp file for Emacs.
+This is a simplified and unified version of the Pd remote control helpers that I've been distributing with various Pd externals such as [pd-faust](https://github.com/agraef/pure-lang/tree/master/pd-faust) and [pd-lua](https://github.com/agraef/pd-lua) over the years. The present implementation will work with any of these and replaces the more specialized versions. It takes the form of a Pd abstraction pd-remote.pd and an accompanying pd-remote.el elisp file for Emacs.
 
 - pd-remote.pd goes into your Pd patches that you want to control remotely via Pd messages sent over UDP port 4711. These messages can be sent over the local network with the pdsend program, or you can pass messages directly into the inlet of the abstraction for testing purposes.
 
-- pd-remote.el provides the necessary hooks to send messages to pd-remote.pd via pdsend from the programmer's text editor, Emacs. It also includes support for pd-lua and pd-faustgen2, and adds some convenient keybindings for lua-mode and faust-mode, both available from [MELPA](https://melpa.org).
+- pd-remote.el provides the necessary hooks to send messages to pd-remote.pd via pdsend from the programmer's text editor, Emacs. It also includes built-in support for pd-lua and [pd-faustgen2](https://github.com/agraef/pd-faustgen) (which has since replaced pd-faust), and adds some convenient keybindings for lua-mode and faust-mode, both available from [MELPA](https://melpa.org).
 
 Please note that pd-remote.pd is really a very simple abstraction which merely receives Pd messages of the form `symbol atoms ...` either from its inlet or via netreceive, and then just sends the given atoms (any number of symbols or numbers) to the given receiver symbol at the front of the message, that's all. You still have to set up the corresponding receivers in your patch as needed. But in the case of pd-lua or pd-faustgen2 objects, the receivers are already there for reloading source programs, which is pd-remote's primary purpose.
 
@@ -24,7 +24,7 @@ Create ~/.emacs.d/lisp if necessary and copy pd-remote.el to that directory. Fin
 (require 'pd-remote)
 ~~~
 
-This also autoloads Faust and Lua mode and adds some convenient keybindings.
+This also autoloads Faust and Lua mode and adds some convenient keybindings. You can also change these as needed by editing your local copy of pd-remote.el in ~/.emacs.d/lisp accordingly.
 
 ## Usage
 
@@ -34,7 +34,7 @@ The most common use for pd-remote is to tell Pd when to reload or recompile Lua 
 
 - In either case, at present pd-remote simply reloads *all* corresponding objects, not just objects that have actually been edited. In a future version, we may hopefully be more clever about this.
 
-In Faust mode there are some other special keybindings, but please note that these are really just examples; you can change these bindings in both lua-mode and faust-mode as needed/wanted, and you can add pretty much any Pd message there, as long as it starts with a symbol for a receiver in your patch.
+In Faust mode there are some other special keybindings:
 
 | Keybinding | Message Sent                            |
 | ---------- | --------------------------------------- |
@@ -44,6 +44,19 @@ In Faust mode there are some other special keybindings, but please note that the
 | C-C C-G    | Restart (sends `play 0,` then `play 1`) |
 | C-/        | DSP on (`pd dsp 1`)                     |
 | C-.        | DSP off (`pd dsp 0`)                    |
+
+Please note that these are really just examples. You can change any of these bindings in both lua-mode and faust-mode as needed/wanted, and you can add pretty much any Pd message there, as long as it starts with a symbol for a receiver in your patch. In the same vein, you can easily add pd-remote support to any Emacs mode that you use in conjunction with Pd, as long as there is some receiver on the Pd side which processes the Pd messages you want to send.
+
+In fact, the DSP on/off messages are not just useful in Faust mode, so you may want to add them to your *global* keybindings, too:
+
+~~~lisp
+(global-set-key [(control ?\/)] 'pd-dsp-on)
+(global-set-key [(control ?\.)] 'pd-dsp-off)
+~~~
+
+You can either put these lines into your local copy of pd-remote.el, or just add them to your .emacs.
+
+However, one thing to remember is that, in order to make any of this work, pd-remote.pd needs to be loaded on the Pd side. Usually you will include it as an abstraction in the Pd patch that you're working with, but if that isn't possible then you can also just open the pd-remote.pd patch itself in Pd.
 
 ## Examples
 
