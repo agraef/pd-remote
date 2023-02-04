@@ -30,7 +30,7 @@ This also autoloads Faust and Lua mode and adds some convenient keybindings. You
 
 The most common use for pd-remote is to tell Pd when to reload or recompile Lua and Faust objects, for which there is a common keyboard shortcut in both Lua and Faust mode, C-C C-K (i.e., Ctrl+C Ctrl+K). This sends the reload or compile message to the pdluax and faustgen2~ receivers, respectively, depending on which kind of file you're editing in Emacs.
 
-- To make this work for Lua objects, some preparation is needed, as described in the live-coding section of the pd-lua tutorial. For Faust programs this should work out of the box, just adding pd-remote to the patch is enough.
+- To make this work for Lua objects, some preparation is needed, as described in the [live-coding section](https://agraef.github.io/pd-lua/tutorial/pd-lua-intro.html#remote-control) of the pd-lua tutorial. For Faust programs this should work out of the box, just adding pd-remote to the patch is enough.
 
 - In either case, at present pd-remote simply reloads *all* corresponding objects, not just objects that have actually been edited. In a future version, we may hopefully be more clever about this.
 
