@@ -33,6 +33,18 @@
   (unless (get-process "pdsend") (pd-send-start-process))
   (process-send-string "pdsend" (concat message "\n")))
 
+;; some convenient helpers
+
+(defun pd-dsp-on ()
+  "Start dsp processing."
+  (interactive)
+  (pd-send-message "pd dsp 1"))
+
+(defun pd-dsp-off ()
+  "Stop dsp processing."
+  (interactive)
+  (pd-send-message "pd dsp 0"))
+
 ;; Faust mode; this requires Juan Romero's Faust mode available at
 ;; https://github.com/rukano/emacs-faust-mode. NOTE: If you don't have this,
 ;; or you don't need it, just comment the following two lines.
@@ -55,10 +67,8 @@
   (define-key faust-mode-map "\C-c\C-g" '(lambda () "Restart" (interactive)
 					   (pd-send-message "play 0")
 					   (pd-send-message "play 1")))
-  (define-key faust-mode-map [(control ?\/)] '(lambda () "Dsp On" (interactive)
-						(pd-send-message "pd dsp 1")))
-  (define-key faust-mode-map [(control ?\.)] '(lambda () "Dsp Off" (interactive)
-						(pd-send-message "pd dsp 0")))
+  (define-key faust-mode-map [(control ?\/)] 'pd-dsp-on)
+  (define-key faust-mode-map [(control ?\.)] 'pd-dsp-off)
   ))
 (add-hook 'faust-mode-hook '(lambda () (use-local-map faust-mode-map)))
 
@@ -73,6 +83,10 @@
 ; Pd tie-in (see pd-lua tutorial)
 (define-key lua-mode-map "\C-c\C-k" '(lambda () "Reload" (interactive)
 				       (pd-send-message "pdluax reload")))
+
+;; add any convenient global keybindings here
+;(global-set-key [(control ?\/)] 'pd-dsp-on)
+;(global-set-key [(control ?\.)] 'pd-dsp-off)
 
 (provide 'pd-remote)
 ;;; pd-remote.el ends here
