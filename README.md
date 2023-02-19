@@ -8,6 +8,10 @@ This is a simplified and unified version of the Pd remote control helpers that I
 
 Please note that pd-remote.pd is really a very simple abstraction which merely receives Pd messages of the form `symbol atoms ...` either from its inlet or via netreceive, and then just sends the given atoms (any number of symbols or numbers) to the given receiver symbol at the front of the message, that's all. You still have to set up the corresponding receivers in your patch as needed. But in the case of pd-lua or pd-faustgen2 objects, the receivers are already there for reloading source programs, which is pd-remote's primary purpose.
 
+### pd-remote in Visual Studio Code
+
+A [Visual Studio Code](https://code.visualstudio.com/) version by Baris Altun is available which utilizes the same interface. Please check <https://github.com/barisssss/pdRemoteVscode> for details and installation instructions.
+
 ## Installation
 
 pd-remote.pd can be copied to your Pd extra directory (e.g., /usr/lib/pd/extra on Linux) for a system-wide installation, or you can just copy it to the directory with the patches you want to use it in.
