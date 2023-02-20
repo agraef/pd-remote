@@ -1,18 +1,25 @@
 ;;; pd-remote.el --- Pd remote control stuff.
 
+;; Copyright (c) 2023 Albert Graef
+
+;; Author: Albert Graef <aggraef@gmail.com>
+;; Keywords: multimedia, pure-data
+;; URL: https://github.com/agraef/pd-remote
+;; License: MIT
+
 ;;; Commentary:
 
-;;; You can add this to your .emacs for remote control of Pd patches in
-;;; conjunction with the accompanying pd-remote.pd abstraction. In particular,
-;;; there's support for reloading pd_lua scripts and compiling Faust programs
-;;; with faustgen2~.
+;; You can add this to your .emacs for remote control of Pd patches in
+;; conjunction with the accompanying pd-remote.pd abstraction. In particular,
+;; there's support for reloading pd_lua scripts and compiling Faust programs
+;; with faustgen2~.
 
-;;; Install this anywhere where Emacs finds it (e.g., in the Emacs site-lisp
-;;; directory -- usually under /usr/share/emacs/site-lisp on Un*x systems, or
-;;; in any directory on the Emacs load-path) and load it in your .emacs as
-;;; follows:
+;; Install this anywhere where Emacs finds it (e.g., in the Emacs site-lisp
+;; directory -- usually under /usr/share/emacs/site-lisp on Un*x systems, or
+;; in any directory on the Emacs load-path) and load it in your .emacs as
+;; follows:
 
-;;; (require 'pd-remote)
+;; (require 'pd-remote)
 
 ;;; Code:
 
@@ -56,15 +63,15 @@
 (defun pd-define-keys (mode-map)
   "Add common Pd keybindings to MODE-MAP."
   (define-key mode-map "\C-c\C-m" 'pd-send-message)
-  (define-key mode-map "\C-c\C-s" '(lambda () "Start" (interactive)
-					   (pd-send-message "play 1")))
-  (define-key mode-map "\C-c\C-t" '(lambda () "Stop" (interactive)
-					   (pd-send-message "play 0")))
-  (define-key mode-map "\C-c\C-g" '(lambda () "Restart" (interactive)
-					   (pd-send-message "play 0")
-					   (pd-send-message "play 1")))
-  (define-key mode-map [(control ?\/)] 'pd-dsp-on)
-  (define-key mode-map [(control ?\.)] 'pd-dsp-off)
+  (define-key mode-map "\C-c\C-s" #'(lambda () "Start" (interactive)
+				      (pd-send-message "play 1")))
+  (define-key mode-map "\C-c\C-t" #'(lambda () "Stop" (interactive)
+				      (pd-send-message "play 0")))
+  (define-key mode-map "\C-c\C-g" #'(lambda () "Restart" (interactive)
+				      (pd-send-message "play 0")
+				      (pd-send-message "play 1")))
+  (define-key mode-map [(control ?\/)] #'pd-dsp-on)
+  (define-key mode-map [(control ?\.)] #'pd-dsp-off)
   )
 
 ;; Juan's Faust mode doesn't have a local keymap, add one.
@@ -73,8 +80,8 @@
  ((not faust-mode-map)
   (setq faust-mode-map (make-sparse-keymap))
   ;; Some convenient keybindings for Faust mode.
-  (define-key faust-mode-map "\C-c\C-k" '(lambda () "Compile" (interactive)
-					   (pd-send-message "faustgen2~ compile")))
+  (define-key faust-mode-map "\C-c\C-k" #'(lambda () "Compile" (interactive)
+					    (pd-send-message "faustgen2~ compile")))
   (pd-define-keys faust-mode-map)
   ))
 (add-hook 'faust-mode-hook '(lambda () (use-local-map faust-mode-map)))
@@ -84,17 +91,19 @@
 ;; Pd Lua uses this as the extension for Lua scripts
 (setq auto-mode-alist (cons '("\\.pd_luax?$" . lua-mode) auto-mode-alist))
 ;; add some convenient key bindings
-(define-key lua-mode-map "\C-c\C-c" 'lua-send-current-line)
-(define-key lua-mode-map "\C-c\C-d" 'lua-send-defun)
-(define-key lua-mode-map "\C-c\C-r" 'lua-send-region)
+(define-key lua-mode-map "\C-c\C-c" #'lua-send-current-line)
+(define-key lua-mode-map "\C-c\C-d" #'lua-send-defun)
+(define-key lua-mode-map "\C-c\C-r" #'lua-send-region)
 ; Pd tie-in (see pd-lua tutorial)
 (pd-define-keys lua-mode-map)
-(define-key lua-mode-map "\C-c\C-k" '(lambda () "Reload" (interactive)
-				       (pd-send-message "pdluax reload")))
+(define-key lua-mode-map "\C-c\C-k" #'(lambda () "Reload" (interactive)
+					(pd-send-message "pdluax reload")))
 
 ;; add any convenient global keybindings here
-;(global-set-key [(control ?\/)] 'pd-dsp-on)
-;(global-set-key [(control ?\.)] 'pd-dsp-off)
+;(global-set-key [(control ?\/)] #'pd-dsp-on)
+;(global-set-key [(control ?\.)] #'pd-dsp-off)
 
 (provide 'pd-remote)
+
+;; End:
 ;;; pd-remote.el ends here
