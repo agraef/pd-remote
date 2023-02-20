@@ -62,7 +62,7 @@
 ;; in different keymaps
 (defun pd-define-keys (mode-map)
   "Add common Pd keybindings to MODE-MAP."
-  (define-key mode-map "\C-c\C-m" 'pd-send-message)
+  (define-key mode-map "\C-c\C-m" #'pd-send-message)
   (define-key mode-map "\C-c\C-s" #'(lambda () "Start" (interactive)
 				      (pd-send-message "play 1")))
   (define-key mode-map "\C-c\C-t" #'(lambda () "Stop" (interactive)
@@ -84,7 +84,7 @@
 					    (pd-send-message "faustgen2~ compile")))
   (pd-define-keys faust-mode-map)
   ))
-(add-hook 'faust-mode-hook '(lambda () (use-local-map faust-mode-map)))
+(add-hook 'faust-mode-hook #'(lambda () (use-local-map faust-mode-map)))
 
 ;; Lua mode: This requires lua-mode from MELPA.
 (require 'lua-mode)
