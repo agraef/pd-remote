@@ -6,17 +6,15 @@ This is a simplified and unified version of the Pd remote control helpers that I
 
 - pd-remote.el provides the necessary hooks to send messages to pd-remote.pd via pdsend from the [Emacs](https://en.wikipedia.org/wiki/GNU_Emacs) text editor. It also includes built-in support for pd-lua and [pd-faustgen2](https://github.com/agraef/pd-faustgen) (which has since replaced pd-faust), and adds some convenient keybindings for lua-mode and faust-mode, both available from [MELPA](https://melpa.org).
 
-Please note that pd-remote.pd is really a very simple abstraction which merely receives Pd messages of the form `symbol atoms ...` either from its inlet or via netreceive, and then just sends the given atoms (any number of symbols or numbers) to the given receiver symbol at the front of the message, that's all. You still have to set up the corresponding receivers in your patch as needed. But in the case of pd-lua or pd-faustgen2 objects, the receivers are already there for reloading source programs, which is pd-remote's primary purpose.
+Please note that pd-remote.pd is really a very simple abstraction which merely receives Pd messages of the form `symbol atoms ...` either from its inlet or via netreceive, and then just sends the given atoms (any number of symbols or numbers** to the given receiver symbol at the front of the message, that's all. You still have to set up the corresponding receivers in your patch as needed. But in the case of pd-lua or pd-faustgen2 objects, the receivers are already there for reloading source programs, which is pd-remote's primary purpose.
 
-### pd-remote in Visual Studio Code
-
-A [Visual Studio Code](https://code.visualstudio.com/) version by Baris Altun is available which utilizes the same interface. Please check <https://github.com/barisssss/pdRemoteVscode> for details and installation instructions.
+**NOTE:** A [Visual Studio Code](https://code.visualstudio.com/) version by Baris Altun is available on [GitHub](https://github.com/barisssss/pdRemoteVscode), which utilizes the same interface. This is the version we recommend if you prefer a modern-style editing environment. Please check the notes [below](#using-pd-remote-with-vs-code), and see Baris' repository for details and installation instructions.
 
 ## Installation
 
 pd-remote.pd can be copied to your Pd extra directory (e.g., /usr/lib/pd/extra on Linux) for a system-wide installation, or you can just copy it to the directory with the patches you want to use it in.
 
-pd-remote.el needs to go into a directory that Emacs searches for elisp files, such as /usr/share/emacs/site-lisp on Linux systems for a system-wide, or some place in ~/.emacs.d for a personal installation. E.g., you may want to put this into your .emacs to make sure that ~/.emacs.d/lisp is searched for elisp files (cf. https://www.emacswiki.org/emacs/LoadPath):
+pd-remote.el isn't in any of the elisp package archives yet, so it needs to be installed manually as well for now. Just copy it to a directory that Emacs searches for elisp files, such as /usr/share/emacs/site-lisp on Linux systems for a system-wide, or some place in ~/.emacs.d for a personal installation. E.g., you may want to put this into your .emacs to make sure that ~/.emacs.d/lisp is searched for elisp files (cf. https://www.emacswiki.org/emacs/LoadPath):
 
 ~~~lisp
 (add-to-list 'load-path "~/.emacs.d/lisp/")
@@ -60,10 +58,20 @@ In fact, the DSP on/off messages are not just useful in Faust and Lua mode, so y
 
 You can either put these lines into your local copy of pd-remote.el, or just add them to your .emacs.
 
-However, one thing to remember is that, in order to make any of this work, pd-remote.pd needs to be loaded on the Pd side. Usually you will include it as an abstraction in the Pd patch that you're working with, but if that isn't possible then you can also just open the pd-remote.pd patch itself in Pd.
+## Troubleshooting
+
+If communication between Emacs and Pd fails to work, here are some things that you should look at:
+
+- The pdsend program needs to be installed and on the PATH. This program usually accompanies the different Pd flavors but may not always be on the PATH, so you may have to either copy it to a directory on your PATH, modify your PATH accordingly, or edit pd-remote.el to supply the absolute path under which pdsend can be found.
+
+- pd-remote.pd needs to be loaded on the Pd side. Usually you will include it as an abstraction in the Pd patch that you're working with, but if that isn't possible then you can also just open the pd-remote.pd patch itself in Pd.
 
 ## Examples
 
 I've included some examples from the pd-lua and pd-faustgen2 distributions in the examples subdirectory for your perusal. In the sample patches, right-click on the Lua or Faust objects to open them in Emacs (this assumes that Emacs is your default text editor), or open them directly in Emacs using your file manager or the command line.
 
-You can then change the Lua script or Faust program, as described in the pd-lua or pd-faustgen2 documentation. When you're done with your changes, just press C-C C-K in Emacs to have the objects reload the corresponding source in the Pd patch. This works even as the patch keeps running, although you may notice some hiccups in the audio or control processing while the programs are reloaded. (Note: This may look like Emacs somehow submits the edited program to the Pd patch, but it merely sends a message via pd-remote which makes the objects themselves reload their source files.)
+You can then change the Lua script or Faust program, as described in the pd-lua or pd-faustgen2 documentation. When you've saved your changes, just press C-C C-K in Emacs to have the objects reload the corresponding source in the Pd patch. This works even as the patch keeps running, although you may notice some hiccups in the audio or control processing while the programs are reloaded. (Note: This may look like Emacs somehow submits the edited program to the Pd patch, but it merely sends a message via pd-remote which makes the objects themselves reload their source files.)
+
+### Using pd-remote with VS Code
+
+The same workflow can be employed with Baris' [VS Code version](https://github.com/barisssss/pdRemoteVscode) of pd-remote mentioned above which offers the same keybindings by default. In this case you'd usually want to configure VS Code as your default text editor. Emacs has a steep learning curve, so if you're not familiar with it, or just prefer a modern-style editing environment, VS Code will be the better choice. It's also easier to install Baris' extension which is available in Microsoft's extension marketplace (just go to VS Code's extension manager and search for pd-remote).
