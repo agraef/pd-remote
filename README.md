@@ -54,7 +54,7 @@ Both modes also offer the following special keybindings:
 | C-C C-M    | Prompts for a message to send to Pd     |
 | C-C C-S    | Start (sends a `play 1` message)        |
 | C-C C-T    | Stop (sends a `play 0` message)         |
-| C-C C-G    | Restart (sends `play 0,` then `play 1`) |
+| C-C C-R    | Restart (sends `play 0,` then `play 1`) |
 | C-/        | DSP on (`pd dsp 1`)                     |
 | C-.        | DSP off (`pd dsp 0`)                    |
 
