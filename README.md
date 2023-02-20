@@ -92,3 +92,8 @@ You can then change the Lua script or Faust program, as described in the pd-lua 
 ### Using pd-remote with VS Code
 
 The same workflow can be employed with Baris' [VS Code version](https://github.com/barisssss/pdRemoteVscode) of pd-remote mentioned above which offers the same keybindings by default. In this case you'd usually want to configure VS Code as your default text editor. Emacs has a steep learning curve, so if you're not familiar with it, or just prefer a modern-style editing environment, VS Code will be the better choice.
+
+## Future Work
+
+- Add some configuration variables to pd-remote.el (e.g., key bindings, UDP port number, and pdsend pathname), to mirror what's available in the VS Code version.
+- Try to be more clever about which objects to reload after edits. This will require changes in pd-lua and pd-faustgen2 and a fair deal of bidirectional communication between Pd and Emacs (or VS Code) in order to figure out which objects need to be reloaded, and under what receive symbols they can be told to do so.
