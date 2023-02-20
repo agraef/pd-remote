@@ -63,8 +63,8 @@ Please note that these are really just examples. You can change any of these bin
 In fact, the DSP on/off messages are not just useful in Faust and Lua mode, so you may want to add them to your *global* keybindings, too:
 
 ~~~lisp
-(global-set-key [(control ?\/)] #'pd-dsp-on)
-(global-set-key [(control ?\.)] #'pd-dsp-off)
+(global-set-key [(control ?\/)] #'pd-remote-dsp-on)
+(global-set-key [(control ?\.)] #'pd-remote-dsp-off)
 ~~~
 
 You can either put these lines into your local copy of pd-remote.el, or just add them to your .emacs.
