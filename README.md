@@ -60,7 +60,7 @@ You can either put these lines into your local copy of pd-remote.el, or just add
 
 ## Troubleshooting
 
-If communication between Emacs and Pd fails to work, here are some things that you should look at:
+If communication between Emacs and Pd fails to work, here are some things to watch out for:
 
 - The pdsend program needs to be installed and on the PATH. This program usually accompanies the different Pd flavors but may not always be on the PATH, so you may have to either copy it to a directory on your PATH, modify your PATH accordingly, or edit pd-remote.el to supply the absolute path under which pdsend can be found.
 
