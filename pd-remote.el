@@ -51,24 +51,31 @@
 (setq auto-mode-alist (cons '("\\.dsp$" . faust-mode) auto-mode-alist))
 (autoload 'faust-mode "faust-mode" "FAUST editing mode." t)
 
+;; various convenient keybindings, factored out so that they can be used
+;; in different keymaps
+(defun pd-define-keys (mode-map)
+  "Add common Pd keybindings to MODE-MAP."
+  (define-key mode-map "\C-c\C-m" 'pd-send-message)
+  (define-key mode-map "\C-c\C-s" '(lambda () "Start" (interactive)
+					   (pd-send-message "play 1")))
+  (define-key mode-map "\C-c\C-t" '(lambda () "Stop" (interactive)
+					   (pd-send-message "play 0")))
+  (define-key mode-map "\C-c\C-g" '(lambda () "Restart" (interactive)
+					   (pd-send-message "play 0")
+					   (pd-send-message "play 1")))
+  (define-key mode-map [(control ?\/)] 'pd-dsp-on)
+  (define-key mode-map [(control ?\.)] 'pd-dsp-off)
+  )
+
 ;; Juan's Faust mode doesn't have a local keymap, add one.
 (defvar faust-mode-map nil)
 (cond
  ((not faust-mode-map)
   (setq faust-mode-map (make-sparse-keymap))
   ;; Some convenient keybindings for Faust mode.
-  (define-key faust-mode-map "\C-c\C-m" 'pd-send-message)
   (define-key faust-mode-map "\C-c\C-k" '(lambda () "Compile" (interactive)
 					   (pd-send-message "faustgen2~ compile")))
-  (define-key faust-mode-map "\C-c\C-s" '(lambda () "Start" (interactive)
-					   (pd-send-message "play 1")))
-  (define-key faust-mode-map "\C-c\C-t" '(lambda () "Stop" (interactive)
-					   (pd-send-message "play 0")))
-  (define-key faust-mode-map "\C-c\C-g" '(lambda () "Restart" (interactive)
-					   (pd-send-message "play 0")
-					   (pd-send-message "play 1")))
-  (define-key faust-mode-map [(control ?\/)] 'pd-dsp-on)
-  (define-key faust-mode-map [(control ?\.)] 'pd-dsp-off)
+  (pd-define-keys faust-mode-map)
   ))
 (add-hook 'faust-mode-hook '(lambda () (use-local-map faust-mode-map)))
 
@@ -81,6 +88,7 @@
 (define-key lua-mode-map "\C-c\C-d" 'lua-send-defun)
 (define-key lua-mode-map "\C-c\C-r" 'lua-send-region)
 ; Pd tie-in (see pd-lua tutorial)
+(pd-define-keys lua-mode-map)
 (define-key lua-mode-map "\C-c\C-k" '(lambda () "Reload" (interactive)
 				       (pd-send-message "pdluax reload")))
 
