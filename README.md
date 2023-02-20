@@ -6,27 +6,38 @@ This is a simplified and unified version of the Pd remote control helpers that I
 
 - pd-remote.el provides the necessary hooks to send messages to pd-remote.pd via pdsend from the [Emacs](https://en.wikipedia.org/wiki/GNU_Emacs) text editor. It also includes built-in support for pd-lua and [pd-faustgen2](https://github.com/agraef/pd-faustgen) (which has since replaced pd-faust), and adds some convenient keybindings for lua-mode and faust-mode, both available from [MELPA](https://melpa.org).
 
-**VS Code users:** There's no need to despair any more if you are not keen on learning Emacs. Baris Altun has created a [Visual Studio Code](https://code.visualstudio.com/) version of pd-remote which utilizes the same interface and can be used as a replacement for pd-remote.el. Baris' extension can be installed quite easily, as it is available in Microsoft's extension marketplace (just go to VS Code's extension manager and search for pd-remote). This is the version we recommend if you prefer a modern-style editing environment. Please check the notes [below](#using-pd-remote-with-vs-code), and see [Baris' repository](https://github.com/barisssss/pdRemoteVscode) for details and installation instructions. Thanks, Baris!
+**VS Code users:** There's no need to despair any more if you are not keen on learning Emacs. Baris Altun has created a [Visual Studio Code](https://code.visualstudio.com/) version of pd-remote which utilizes the same interface and can be used as a replacement for pd-remote.el if you're so inclined. Baris' extension is available in Microsoft's extension marketplace (just go to VS Code's extension manager and search for pd-remote). Please check the notes [below](#using-pd-remote-with-vs-code), and see [Baris' repository](https://github.com/barisssss/pdRemoteVscode) for details and installation instructions. Thanks, Baris!
 
 Also note that pd-remote.pd is really a very simple abstraction which merely receives Pd messages of the form `symbol atoms ...` either from its inlet or via netreceive, and dispatches each message to the given receiver symbol at the front of the message, that's all. You still have to set up the corresponding receivers in your patch as needed. But in the case of pd-lua or pd-faustgen2 objects, the receivers are already there for reloading source programs, which is pd-remote's primary purpose.
 
 ## Installation
 
-pd-remote.pd can be copied to your Pd extra directory (e.g., /usr/lib/pd/extra on Linux) for a system-wide installation, or you can just copy it to the directory with the patches you want to use it in.
+### Install pd-remote.pd
 
-pd-remote.el isn't in any of the elisp package archives yet, so it needs to be installed manually for now. Just copy it to a directory that Emacs searches for elisp files, such as /usr/share/emacs/site-lisp on Linux systems for a system-wide, or some place in ~/.emacs.d for a personal installation. E.g., you may want to put this into your .emacs to make sure that ~/.emacs.d/lisp is searched for elisp files (cf. https://www.emacswiki.org/emacs/LoadPath):
+There's a pdlibbuilder-based Makefile with which you can install the abstraction and the accompanying examples for system-wide use in the usual way (`make install` will usually do the trick). But there's really no need to install the abstraction at all, you can also just drop it into the directory with the patches you want to use it in.
 
-~~~lisp
-(add-to-list 'load-path "~/.emacs.d/lisp/")
-~~~
+### Install pd-remote.el
 
-Create ~/.emacs.d/lisp if necessary and copy pd-remote.el to that directory. Finally, make sure that you have both lua-mode and faust-mode installed (use the "Manage Emacs Packages" option to do this, cf. https://www.emacswiki.org/emacs/InstallingPackages), then add this line to your .emacs:
+- The **easy** way: Install it from [MELPA](https://melpa.org/) (currently WIP, check back later).
+- The **hard** way: Copy pd-remote.el to some place on your Emacs load-path.
+
+Either way, make sure that you also have both lua-mode and faust-mode installed, they're both available from MELPA. Then add this line to your .emacs:
 
 ~~~lisp
 (require 'pd-remote)
 ~~~
 
-This also autoloads Faust and Lua mode and adds some convenient keybindings. You can also change these as needed by editing your local copy of pd-remote.el in ~/.emacs.d/lisp accordingly.
+This also autoloads Faust and Lua mode and adds some convenient keybindings. You can also change these as needed by editing your local copy of pd-remote.el in ~/.emacs.d accordingly.
+
+#### Notes for Emacs newbies
+
+The Emacs [load-path](https://www.emacswiki.org/emacs/LoadPath) usually includes places like /usr/share/emacs/site-lisp for a system-wide, and/or some places in ~/.emacs.d for personal installation. If you're using MELPA, then all this will be taken care for you, but if you prefer manual installation, you may want to put this into your .emacs to make sure that ~/.emacs.d/lisp is searched for elisp files:
+
+~~~lisp
+(add-to-list 'load-path "~/.emacs.d/lisp/")
+~~~
+
+Create ~/.emacs.d/lisp if necessary and copy pd-remote.el to that directory.
 
 ## Usage
 
