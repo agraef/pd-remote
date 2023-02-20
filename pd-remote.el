@@ -10,7 +10,7 @@
 ;;; Commentary:
 
 ;; You can add this to your .emacs for remote control of Pd patches in
-;; conjunction with the accompanying pd-remote.pd abstraction. In particular,
+;; conjunction with the accompanying pd-remote.pd abstraction.  In particular,
 ;; there's support for reloading pd_lua scripts and compiling Faust programs
 ;; with faustgen2~.
 

@@ -31,7 +31,7 @@ This also autoloads Faust and Lua mode and adds some convenient keybindings. You
 
 #### Notes for Emacs newbies
 
-The Emacs [load-path](https://www.emacswiki.org/emacs/LoadPath) usually includes places like /usr/share/emacs/site-lisp for a system-wide, and/or some places in ~/.emacs.d for personal installation. If you're using MELPA, then all this will be taken care for you, but if you prefer manual installation, you may want to put this into your .emacs to make sure that ~/.emacs.d/lisp is searched for elisp files:
+The Emacs [load-path](https://www.emacswiki.org/emacs/LoadPath) usually includes places like /usr/share/emacs/site-lisp for a system-wide, and/or some places in ~/.emacs.d for personal installation. If you're using MELPA, then all this will be taken care of for you, but if you prefer manual installation, you may want to put this into your .emacs to make sure that ~/.emacs.d/lisp is searched for elisp files:
 
 ~~~lisp
 (add-to-list 'load-path "~/.emacs.d/lisp/")
@@ -63,8 +63,8 @@ Please note that these are really just examples. You can change any of these bin
 In fact, the DSP on/off messages are not just useful in Faust and Lua mode, so you may want to add them to your *global* keybindings, too:
 
 ~~~lisp
-(global-set-key [(control ?\/)] 'pd-dsp-on)
-(global-set-key [(control ?\.)] 'pd-dsp-off)
+(global-set-key [(control ?\/)] #'pd-dsp-on)
+(global-set-key [(control ?\.)] #'pd-dsp-off)
 ~~~
 
 You can either put these lines into your local copy of pd-remote.el, or just add them to your .emacs.
