@@ -66,6 +66,12 @@ If communication between Emacs and Pd fails to work, here are some things to wat
 
 - pd-remote.pd needs to be loaded on the Pd side. Usually you will include it as an abstraction in the Pd patch that you're working with, but if that isn't possible then you can also just open the pd-remote.pd patch itself in Pd.
 
+- pd-remote.pd uses Pd's `netreceive` which can only listen on a given port in a single instance. Thus, if you use multiple instances of pd-remote.pd, you may see the error message `netreceive: listen failed: Address already in use`, and only one of the instances will actually be active at any one time. Incidentally, this also prevents a received message to be dispatched more than once, which is a good thing. On the other hand, if you happen to close the patch containing the active pd-remote instance, the connection to Emacs will be lost until you re-create a new pd-remote instance (or reopen one of the other patches containing such an instance).
+
+- If you change the UDP port number in pd-remote.el, you'll have to change pd-remote.pd accordingly.
+
+- The same limitations also apply to the VS Code version of pd-remote. However, Baris' extension also provides some convenient configuration parameters which let you change the pdsend pathname and the UDP port number without having to edit the code of the extension.
+
 ## Examples
 
 I've included some examples from the pd-lua and pd-faustgen2 distributions in the examples subdirectory for your perusal. In the sample patches, right-click on the Lua or Faust objects to open them in Emacs (this assumes that Emacs is your default text editor), or open them directly in Emacs using your file manager or the command line.
