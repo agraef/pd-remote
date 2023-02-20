@@ -18,8 +18,8 @@ There's a pdlibbuilder-based Makefile with which you can install the abstraction
 
 ### Install pd-remote.el
 
-- The **easy** way: Install it from [MELPA](https://melpa.org/) (currently WIP, check back later).
-- The **hard** way: Copy pd-remote.el to some place on your Emacs load-path.
+- The **easy** way: Install it from [MELPA](https://melpa.org/) (currently WIP, check back later). Or open pd-remote.el in Emacs and run (Alt+x) `package-install-from-buffer`.
+- The **hard** way: Copy pd-remote.el to some place on your Emacs load-path. (There's really no good reason to do it that way any more, unless you want to avoid Emacs' built-in package management system for some reason.)
 
 Either way, make sure that you also have both lua-mode and faust-mode installed, they're both available from MELPA. Then add this line to your .emacs:
 
@@ -31,13 +31,13 @@ This also autoloads Faust and Lua mode and adds some convenient keybindings. You
 
 #### Notes for Emacs newbies
 
-The Emacs [load-path](https://www.emacswiki.org/emacs/LoadPath) usually includes places like /usr/share/emacs/site-lisp for a system-wide, and/or some places in ~/.emacs.d for personal installation. If you're using MELPA, then all this will be taken care of for you, but if you prefer manual installation, you may want to put this into your .emacs to make sure that ~/.emacs.d/lisp is searched for elisp files:
+The Emacs [load-path](https://www.emacswiki.org/emacs/LoadPath) usually includes places like /usr/share/emacs/site-lisp for a system-wide, and/or some places in ~/.emacs.d for personal installation. If you're using Emacs' built-in package management commands, then all this will be taken care of for you. But if you prefer manual installation, you may want to put this into your .emacs to make sure that ~/.emacs.d/lisp is searched for elisp files:
 
 ~~~lisp
 (add-to-list 'load-path "~/.emacs.d/lisp/")
 ~~~
 
-Create ~/.emacs.d/lisp if necessary and copy pd-remote.el to that directory.
+Then create ~/.emacs.d/lisp if necessary and copy pd-remote.el to that directory.
 
 ## Usage
 
