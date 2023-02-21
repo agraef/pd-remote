@@ -4,7 +4,7 @@
 
 ;; Author: Albert Graef <aggraef@gmail.com>
 ;; Keywords: multimedia, pure-data
-;; Version: 1.1.0
+;; Version: 1.1.1
 ;; Package-Requires: (faust-mode lua-mode)
 ;; URL: https://github.com/agraef/pd-remote
 ;; License: MIT
@@ -80,6 +80,7 @@
 ;; in different keymaps
 (defun pd-remote-keys (mode-map)
   "Add common Pd keybindings to MODE-MAP."
+  (define-key mode-map "\C-c\C-q" #'pd-remote-stop-process)
   (define-key mode-map "\C-c\C-m" #'pd-remote-message)
   (define-key mode-map "\C-c\C-s" #'(lambda () "Start" (interactive)
 				      (pd-remote-message "play 1")))
