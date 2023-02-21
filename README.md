@@ -55,6 +55,7 @@ Both modes also offer the following special keybindings:
 | Keybinding | Message Sent                            |
 | ---------- | --------------------------------------- |
 | C-C C-M    | Prompts for a message to send to Pd     |
+| C-C C-Q    | Stops a running pdsend process          |
 | C-C C-S    | Start (sends a `play 1` message)        |
 | C-C C-T    | Stop (sends a `play 0` message)         |
 | C-C C-R    | Restart (sends `play 0,` then `play 1`) |
@@ -72,12 +73,16 @@ In fact, the DSP on/off messages are not just useful in Faust and Lua mode, so y
 
 You can either put these lines into your local copy of pd-remote.el, or just add them to your .emacs.
 
+Also, note that C-C C-M will prompt you for a message to be sent, so you can send *any* message to Pd that way. Messages are sent using the pdsend program. The pdsend process is started automatically when you first send a message during an Emacs session, and will normally continue to run until you exit Emacs. You can also stop a running pdsend process at any time with C-C C-Q. If you send another message afterwards, a new pdsend process will be started automatically.
+
 ## Customization
 
 Two customization variables are defined in the `pd-remote` customization group (which is located in Emacs' `multimedia` group):
 
 - `pd-remote-pdsend`: Name of the pdsend executable. Normally this is just `"pdsend"`, but you may have to change this to the absolute pathname of the executable if it isn't on the system PATH (in which case Emacs will complain that it can't find the executable).
 - `pd-remote-port`: UDP port number (`"4711"` by default). Note that this number is also hard-coded into the pd-remote.pd abstraction. If you have to change the port number for some reason, then you also have to edit the abstraction accordingly.
+
+Note that changes to these will not affect a running pdsend process, so you will need to restart it (C-C C-Q).
 
 ## Troubleshooting
 
