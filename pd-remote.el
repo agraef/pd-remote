@@ -4,7 +4,7 @@
 
 ;; Author: Albert Graef <aggraef@gmail.com>
 ;; Keywords: multimedia, pure-data
-;; Version: 1.0.1
+;; Version: 1.1.0
 ;; Package-Requires: (faust-mode lua-mode)
 ;; URL: https://github.com/agraef/pd-remote
 ;; License: MIT
