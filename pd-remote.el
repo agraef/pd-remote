@@ -23,10 +23,25 @@
 
 ;;; Code:
 
+(defgroup pd-remote nil
+  "Pd remote control helper."
+  :prefix "pd-remote-"
+  :group 'multimedia)
+
+(defcustom pd-remote-pdsend "pdsend"
+  "This variable specifies the pathname of the pdsend program."
+  :type 'string
+  :group 'pd-remote)
+
+(defcustom pd-remote-port "4711"
+  "This variable specifies the UDP port number to be used."
+  :type 'string
+  :group 'pd-remote)
+
 (defun pd-remote-start-process ()
-  "Start a pdsend process to communicate with Pd via UDP port 4711."
+  "Start a pdsend process to communicate with Pd via UDP."
   (interactive)
-  (start-process "pdsend" nil "pdsend" "4711" "localhost" "udp")
+  (start-process "pdsend" nil pd-remote-pdsend pd-remote-port "localhost" "udp")
   (set-process-query-on-exit-flag (get-process "pdsend") nil))
 
 (defun pd-remote-stop-process ()
