@@ -6,7 +6,7 @@ This is a simplified and unified version of the Pd remote control helpers that I
 
 - pd-remote.el provides the necessary hooks to send messages to pd-remote.pd via pdsend from the [Emacs](https://en.wikipedia.org/wiki/GNU_Emacs) text editor. It also includes built-in support for pd-lua and [pd-faustgen2](https://github.com/agraef/pd-faustgen) (which has since replaced pd-faust), and adds some convenient keybindings for lua-mode and faust-mode, both available from [MELPA](https://melpa.org).
 
-**VS Code users:** There's no need to despair any more if you are not keen on learning Emacs. Baris Altun has created a [Visual Studio Code](https://code.visualstudio.com/) version of pd-remote which utilizes the same interface and can be used as a replacement for pd-remote.el if you're so inclined. Baris' extension is available in Microsoft's extension marketplace (just go to VS Code's extension manager and search for pd-remote). Please check the notes [below](#using-pd-remote-with-vs-code), and see [Baris' repository](https://github.com/barisssss/pdRemoteVscode) for details and installation instructions. Thanks, Baris!
+**VS Code users:** Baris Altun has created a [Visual Studio Code](https://code.visualstudio.com/) version of pd-remote which utilizes the same interface and can be used as a replacement for pd-remote.el if you're so inclined. Baris' extension is available in Microsoft's extension marketplace (just go to VS Code's extension manager and search for pd-remote). Please check the notes [below](#using-pd-remote-with-vs-code), and see [Baris' repository](https://github.com/barisssss/pdRemoteVscode) for details and installation instructions. Thanks, Baris!
 
 Also note that pd-remote.pd is really a very simple abstraction which merely receives Pd messages of the form `symbol atoms ...` either from its inlet or via netreceive, and dispatches each message to the given receiver symbol at the front of the message, that's all. You still have to set up the corresponding receivers in your patch as needed. But in the case of pd-lua or pd-faustgen2 objects, the receivers are already there for reloading source programs, which is pd-remote's primary purpose.
 
@@ -18,7 +18,7 @@ There's a pdlibbuilder-based Makefile with which you can install the abstraction
 
 ### Install pd-remote.el
 
-The **easy** way: Install it from [MELPA](https://melpa.org/). (Submission currently pending, check back later. For the time being, open pd-remote.el in Emacs and run (Alt+x) `package-install-from-buffer`.)
+The **easy** way: Install it from [MELPA](https://melpa.org/). (Submission currently pending, please check back later. For the time being, open pd-remote.el in Emacs and run (Alt+x) `package-install-from-buffer`.)
 
 The **hard** way: Copy pd-remote.el to some place on your Emacs load-path. (See the notes below if needed.)
 
@@ -28,7 +28,7 @@ Either way, to finish the installation you need to add this line to your .emacs:
 (require 'pd-remote)
 ~~~
 
-This autoloads Faust and Lua mode and adds some convenient keybindings. You can also change these as needed by editing your local copy of pd-remote.el accordingly.
+This also loads Faust and Lua mode and adds some convenient keybindings. (You can also change these as needed by editing your local copy of pd-remote.el.)
 
 #### Emacs newbies: Notes for manual installation
 
@@ -72,19 +72,26 @@ In fact, the DSP on/off messages are not just useful in Faust and Lua mode, so y
 
 You can either put these lines into your local copy of pd-remote.el, or just add them to your .emacs.
 
+## Customization
+
+Two customization variables are defined in the `pd-remote` customization group (which is located in Emacs' `multimedia` group):
+
+- `pd-remote-pdsend`: Name of the pdsend executable. Normally this is just `"pdsend"`, but you may have to change this to the absolute pathname of the executable if it isn't on the system PATH (in which case Emacs will complain that it can't find the executable).
+- `pd-remote-port`: UDP port number (`"4711"` by default). Note that this number is also hard-coded into the pd-remote.pd abstraction. If you have to change the port number for some reason, then you also have to edit the abstraction accordingly.
+
 ## Troubleshooting
 
 If communication between Emacs and Pd fails to work, here are some things to watch out for:
 
-- The pdsend program needs to be installed and on the PATH. This program usually accompanies the different Pd flavors but may not always be on the PATH, so you may have to either copy it to a directory on your PATH, modify your PATH accordingly, or edit pd-remote.el to supply the absolute path under which pdsend can be found.
+- The pdsend program needs to be installed and on the PATH. This program usually accompanies the different Pd flavors but may not always be on the PATH, so you may have to either copy it to a directory on your PATH, modify your PATH accordingly, or edit the `pd-remote-pdsend` customization variable (see above) to supply the absolute path under which pdsend can be found.
 
 - pd-remote.pd needs to be loaded on the Pd side. Usually you will include it as an abstraction in the Pd patch that you're working with, but if that isn't possible then you can also just open the pd-remote.pd patch itself in Pd.
 
-- pd-remote.pd uses Pd's `netreceive` which can only listen on a given port in a single instance. Thus, if you use multiple instances of pd-remote.pd, you may see the error message `netreceive: listen failed: Address already in use`, and only one of the instances will actually be active at any one time. Incidentally, this also prevents a received message to be dispatched more than once, which is a good thing. On the other hand, if you happen to close the patch containing the active pd-remote instance, the connection to Emacs will be lost until you re-create a new pd-remote instance (or reopen one of the other patches containing such an instance).
+- pd-remote.pd uses Pd's `netreceive`. Only a single instance of this object can be listening on a given port at any time. Thus, if you use multiple instances of pd-remote.pd, you may see the error message `netreceive: listen failed: Address already in use`, and only one of the instances will actually be active. Incidentally, this also prevents a received message to be dispatched more than once, which is a good thing. On the other hand, if you happen to close the patch containing the active pd-remote instance, the connection to Emacs will be lost until you re-create a new pd-remote instance (or reopen one of the other patches containing such an instance).
 
-- If you change the UDP port number in pd-remote.el, you'll have to change pd-remote.pd accordingly.
+- Recall that if you change the UDP port number in the `pd-remote-port` customization variable (see above), you'll also have to change pd-remote.pd accordingly.
 
-- The same limitations also apply to the VS Code version of pd-remote. However, Baris' extension also provides some convenient configuration parameters which let you change the pdsend pathname and the UDP port number without having to edit the code of the extension.
+- The same limitations also apply to the VS Code version of pd-remote. Baris' extension also provides some configuration parameters which let you change the pdsend pathname and the UDP port number if needed.
 
 ## Examples
 
@@ -95,8 +102,3 @@ You can then change the Lua script or Faust program, as described in the pd-lua 
 ### Using pd-remote with VS Code
 
 The same workflow can be employed with Baris' [VS Code version](https://github.com/barisssss/pdRemoteVscode) of pd-remote mentioned above which offers the same keybindings by default. In this case you'd usually want to configure VS Code as your default text editor. Emacs has a steep learning curve, so if you're not familiar with it, or just prefer a modern-style editing environment, VS Code will be the better choice.
-
-## Future Work
-
-- Add some configuration variables to pd-remote.el (e.g., key bindings, UDP port number, and pdsend pathname), to mirror what's available in the VS Code version.
-- Try to be more clever about which objects to reload after edits. This will require changes in pd-lua and pd-faustgen2 and a fair deal of bidirectional communication between Pd and Emacs (or VS Code) in order to figure out which objects need to be reloaded, and under what receive symbols they can be told to do so.
