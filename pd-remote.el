@@ -49,6 +49,7 @@
   (interactive)
   (delete-process "pdsend"))
 
+;;;###autoload
 (defun pd-remote-message (message)
   "Send the given MESSAGE to Pd.  Start the pdsend process if needed."
   (interactive "sMessage: ")
@@ -57,11 +58,13 @@
 
 ;; some convenient helpers
 
+;;;###autoload
 (defun pd-remote-dsp-on ()
   "Start dsp processing."
   (interactive)
   (pd-remote-message "pd dsp 1"))
 
+;;;###autoload
 (defun pd-remote-dsp-off ()
   "Stop dsp processing."
   (interactive)
