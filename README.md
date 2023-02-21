@@ -18,26 +18,29 @@ There's a pdlibbuilder-based Makefile with which you can install the abstraction
 
 ### Install pd-remote.el
 
-- The **easy** way: Install it from [MELPA](https://melpa.org/) (currently WIP, check back later). Or open pd-remote.el in Emacs and run (Alt+x) `package-install-from-buffer`.
-- The **hard** way: Copy pd-remote.el to some place on your Emacs load-path. (There's really no good reason to do it that way any more, unless you want to avoid Emacs' built-in package management system for some reason.)
+The **easy** way: Install it from [MELPA](https://melpa.org/). (Submission currently pending, check back later. For the time being, open pd-remote.el in Emacs and run (Alt+x) `package-install-from-buffer`.)
 
-Either way, make sure that you also have both lua-mode and faust-mode installed, they're both available from MELPA. Then add this line to your .emacs:
+The **hard** way: Copy pd-remote.el to some place on your Emacs load-path. (See the notes below if needed.)
+
+Either way, to finish the installation you need to add this line to your .emacs:
 
 ~~~lisp
 (require 'pd-remote)
 ~~~
 
-This also autoloads Faust and Lua mode and adds some convenient keybindings. You can also change these as needed by editing your local copy of pd-remote.el in ~/.emacs.d accordingly.
+This autoloads Faust and Lua mode and adds some convenient keybindings. You can also change these as needed by editing your local copy of pd-remote.el accordingly.
 
-#### Notes for Emacs newbies
+#### Emacs newbies: Notes for manual installation
 
-The Emacs [load-path](https://www.emacswiki.org/emacs/LoadPath) usually includes places like /usr/share/emacs/site-lisp for a system-wide, and/or some places in ~/.emacs.d for personal installation. If you're using Emacs' built-in package management commands, then all this will be taken care of for you. But if you prefer manual installation, you may want to put this into your .emacs to make sure that ~/.emacs.d/lisp is searched for elisp files:
+If you're an Emacs novice, do yourself a favor and install the easy way, using the Emacs package manager.
+
+But if you *really* want to install manually, make sure you understand how the Emacs [load-path](https://www.emacswiki.org/emacs/LoadPath) works. You may want to put this into your .emacs so that ~/.emacs.d/lisp is searched for elisp files:
 
 ~~~lisp
 (add-to-list 'load-path "~/.emacs.d/lisp/")
 ~~~
 
-Then create ~/.emacs.d/lisp if necessary and copy pd-remote.el to that directory.
+Then create ~/.emacs.d/lisp if necessary and copy pd-remote.el to that directory. You'll also have to ensure that both lua-mode and faust-mode are installed (they're both available from MELPA).
 
 ## Usage
 
