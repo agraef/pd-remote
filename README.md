@@ -88,7 +88,7 @@ If communication between Emacs and Pd fails to work, here are some things to wat
 
 ## Examples
 
-I've included some examples from the pd-lua and pd-faustgen2 distributions in the examples subdirectory for your perusal. In the sample patches, right-click on the Lua or Faust objects to open them in Emacs (this assumes that Emacs is your default text editor), or open them directly in Emacs using your file manager or the command line.
+I've included some examples from the [pd-lua](https://github.com/agraef/pd-lua) and [pd-faustgen2](https://github.com/agraef/pd-faustgen) distributions in the examples subdirectory for your perusal. Note that you need to have these externals installed to make the examples work. In the sample patches, right-click on the Lua or Faust objects to open them in Emacs (this assumes that Emacs is your default text editor), or open them directly in Emacs using your file manager or the command line.
 
 You can then change the Lua script or Faust program, as described in the pd-lua or pd-faustgen2 documentation. When you've saved your changes, just press C-C C-K in Emacs to have the objects reload the corresponding source in the Pd patch. This works even as the patch keeps running, although you may notice some hiccups in the audio or control processing while the programs are reloaded. (Note: This may look like Emacs somehow submits the edited program to the Pd patch, but it merely sends a message via pd-remote which makes the objects themselves reload their source files.)
 
