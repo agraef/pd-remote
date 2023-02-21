@@ -5,6 +5,7 @@
 ;; Author: Albert Graef <aggraef@gmail.com>
 ;; Keywords: multimedia, pure-data
 ;; Version: 1.0.1
+;; Package-Requires: (faust-mode lua-mode)
 ;; URL: https://github.com/agraef/pd-remote
 ;; License: MIT
 
@@ -13,12 +14,10 @@
 ;; You can add this to your .emacs for remote control of Pd patches in
 ;; conjunction with the accompanying pd-remote.pd abstraction.  In particular,
 ;; there's support for reloading pd_lua scripts and compiling Faust programs
-;; with faustgen2~.
+;; with faustgen2~.  Requires faust-mode and lua-mode.
 
-;; Install this anywhere where Emacs finds it (e.g., in the Emacs site-lisp
-;; directory -- usually under /usr/share/emacs/site-lisp on Un*x systems, or
-;; in any directory on the Emacs load-path) and load it in your .emacs as
-;; follows:
+;; Install this anywhere where Emacs finds it (any directory on the Emacs
+;; load-path will do) and load it in your .emacs as follows:
 
 ;; (require 'pd-remote)
 
