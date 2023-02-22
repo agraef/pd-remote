@@ -11,13 +11,15 @@
 
 ;;; Commentary:
 
+;; pd-remote is a remote-control and live-coding utility for Pd and Emacs.
+
 ;; You can add this to your .emacs for remote control of Pd patches in
 ;; conjunction with the accompanying pd-remote.pd abstraction.  In particular,
-;; there's support for reloading pd_lua scripts and compiling Faust programs
-;; with faustgen2~.  Requires faust-mode and lua-mode.
+;; there's built-in live-coding support for faust-mode and lua-mode via the
+;; pd-faustgen2 and pd-lua externals.
 
-;; Install this anywhere where Emacs finds it (any directory on the Emacs
-;; load-path will do) and load it in your .emacs as follows:
+;; Install this with the Emacs package manager or put it anywhere where Emacs
+;; will find it, and load it in your .emacs as follows:
 
 ;; (require 'pd-remote)
 
