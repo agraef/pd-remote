@@ -114,10 +114,10 @@ send messages to Pd:
 (require 'lua-mode)
 
 ;; Faust mode doesn't have a default extension, add one
-(setq auto-mode-alist (cons '("\\.dsp$" . faust-mode) auto-mode-alist))
+(add-to-list 'auto-mode-alist '("\\.dsp$" . faust-mode))
 
 ;; pd-lua uses this as the extension for Lua scripts
-(setq auto-mode-alist (cons '("\\.pd_luax?$" . lua-mode) auto-mode-alist))
+(add-to-list 'auto-mode-alist '("\\.pd_luax?$" . lua-mode))
 
 ;; enable our keybindings in Faust and Lua mode
 (add-hook 'faust-mode-hook 'pd-remote-mode)
