@@ -5,7 +5,7 @@
 ;; Author: Albert Graef <aggraef@gmail.com>
 ;; Keywords: multimedia, pure-data
 ;; Version: 1.1.1
-;; Package-Requires: (faust-mode lua-mode)
+;; Package-Requires: ((emacs "24.3") (faust-mode "0.6") (lua-mode "20210802"))
 ;; URL: https://github.com/agraef/pd-remote
 ;; License: MIT
 
@@ -16,7 +16,9 @@
 ;; You can add this to your .emacs for remote control of Pd patches in
 ;; conjunction with the accompanying pd-remote.pd abstraction.  In particular,
 ;; there's built-in live-coding support for faust-mode and lua-mode via the
-;; pd-faustgen2 and pd-lua externals.
+;; pd-faustgen2 and pd-lua externals.  The package also includes a minor mode
+;; (enabled automatically in faust-mode and lua-mode) which adds some
+;; keybindings to invoke these commands.
 
 ;; Install this with the Emacs package manager or put it anywhere where Emacs
 ;; will find it, and load it in your .emacs as follows:
@@ -81,49 +83,45 @@
   (interactive)
   (pd-remote-message "pd dsp 0"))
 
-;; Faust mode; this requires Juan Romero's Faust mode available at
-;; https://github.com/rukano/emacs-faust-mode. NOTE: If you don't have this,
-;; or you don't need it, just comment the following two lines.
-(setq auto-mode-alist (cons '("\\.dsp$" . faust-mode) auto-mode-alist))
-(autoload 'faust-mode "faust-mode" "FAUST editing mode." t)
+;;;###autoload
+(define-minor-mode pd-remote-mode
+  "Toggle Pd-Remote mode.
 
-;; various convenient keybindings, factored out so that they can be used
-;; in different keymaps
-(defun pd-remote-keys (mode-map)
-  "Add common Pd keybindings to MODE-MAP."
-  (define-key mode-map "\C-c\C-q" #'pd-remote-stop-process)
-  (define-key mode-map "\C-c\C-m" #'pd-remote-message)
-  (define-key mode-map "\C-c\C-s" #'(lambda () "Start" (interactive)
-				      (pd-remote-message "play 1")))
-  (define-key mode-map "\C-c\C-t" #'(lambda () "Stop" (interactive)
-				      (pd-remote-message "play 0")))
-  (define-key mode-map "\C-c\C-r" #'(lambda () "Restart" (interactive)
-				      (pd-remote-message "play 0")
-				      (pd-remote-message "play 1")))
-  (define-key mode-map [(control ?\/)] #'pd-remote-dsp-on)
-  (define-key mode-map [(control ?\.)] #'pd-remote-dsp-off))
+This is a minor mode which adds some convenient key bindings to
+send messages to Pd:
 
-;; Juan's Faust mode doesn't have a local keymap, add one.
-(defvar faust-mode-map nil)
-(cond
- ((not faust-mode-map)
-  (setq faust-mode-map (make-sparse-keymap))
-  ;; Some convenient keybindings for Faust mode.
-  (define-key faust-mode-map "\C-c\C-k" #'pd-remote-compile)
-  (pd-remote-keys faust-mode-map)))
-(add-hook 'faust-mode-hook #'(lambda () (use-local-map faust-mode-map)))
+\\{pd-remote-mode-map}"
+ :init-value nil
+ :lighter " Pd"
+ :group 'pd-remote
+ :keymap
+ '(("\C-c\C-q" . pd-remote-stop-process)
+   ("\C-c\C-m" . pd-remote-message)
+   ("\C-c\C-s" . (lambda () "Start" (interactive)
+		   (pd-remote-message "play 1")))
+   ("\C-c\C-t" . (lambda () "Stop" (interactive)
+		   (pd-remote-message "play 0")))
+   ("\C-c\C-r" . (lambda () "Restart" (interactive)
+		   (pd-remote-message "play 0")
+		   (pd-remote-message "play 1")))
+   ("\C-c\C-k" . pd-remote-compile)
+   ([(control ?\/)] . pd-remote-dsp-on)
+   ([(control ?\.)] . pd-remote-dsp-off)))
 
-;; Lua mode: This requires lua-mode from MELPA.
+;; We require Faust and Lua modes here since we need to add some default
+;; filename extensions and pd-remote-mode hooks for these.
+(require 'faust-mode)
 (require 'lua-mode)
-;; Pd Lua uses this as the extension for Lua scripts
+
+;; Faust mode doesn't have a default extension, add one
+(setq auto-mode-alist (cons '("\\.dsp$" . faust-mode) auto-mode-alist))
+
+;; pd-lua uses this as the extension for Lua scripts
 (setq auto-mode-alist (cons '("\\.pd_luax?$" . lua-mode) auto-mode-alist))
-;; add some convenient key bindings
-(define-key lua-mode-map "\C-c\C-c" #'lua-send-current-line)
-(define-key lua-mode-map "\C-c\C-d" #'lua-send-defun)
-(define-key lua-mode-map "\C-c\C-r" #'lua-send-region)
-; Pd tie-in (see pd-lua tutorial)
-(pd-remote-keys lua-mode-map)
-(define-key lua-mode-map "\C-c\C-k" #'pd-remote-compile)
+
+;; enable our keybindings in Faust and Lua mode
+(add-hook 'faust-mode-hook 'pd-remote-mode)
+(add-hook 'lua-mode-hook 'pd-remote-mode)
 
 ;; add any convenient global keybindings here
 ;(global-set-key [(control ?\/)] #'pd-remote-dsp-on)
