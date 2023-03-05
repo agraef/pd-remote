@@ -4,7 +4,7 @@ pd-remote is a remote-control and live-coding utility for [Pd](http://puredata.i
 
 - pd-remote.pd goes into your Pd patches that you want to control remotely via Pd messages sent over UDP port 4711. These messages can be sent over the local network with the pdsend program, or you can pass messages directly into the inlet of the abstraction for testing purposes.
 
-- pd-remote.el provides the necessary hooks to send messages to pd-remote.pd via pdsend from Emacs. It also includes built-in support for [pd-lua](https://github.com/agraef/pd-lua) and [pd-faustgen2](https://github.com/agraef/pd-faustgen), and adds some convenient keybindings for lua-mode and faust-mode, both available from [MELPA](https://melpa.org).
+- pd-remote.el provides the necessary hooks to send messages to pd-remote.pd via pdsend from Emacs. It also includes built-in support for [pd-lua](https://github.com/agraef/pd-lua) and [pd-faustgen2](https://github.com/agraef/pd-faustgen), and adds some convenient commands and keybindings for lua-mode and faust-mode, both available from [MELPA](https://melpa.org).
 
 **VS Code users:** Baris Altun has created an alternative [Visual Studio Code](https://code.visualstudio.com/) version which utilizes the same interface and can be used as a replacement for pd-remote.el if you're so inclined. Baris' extension is available in Microsoft's extension marketplace (just go to VS Code's extension manager and search for [pd-remote](https://marketplace.visualstudio.com/items?itemName=barisssss.pd-remote-vscode)). Please check the notes [below](#using-pd-remote-with-vs-code), and see [Baris' repository](https://github.com/barisssss/pdRemoteVscode) for details and installation instructions. Thanks, Baris!
 
@@ -44,27 +44,34 @@ Then create ~/.emacs.d/lisp if necessary and copy pd-remote.el to that directory
 
 ## Usage
 
-The most common use for pd-remote is to tell Pd when to reload or recompile Lua and Faust objects, for which there is a common keyboard shortcut in both Lua and Faust mode, C-C C-K (i.e., Ctrl+C Ctrl+K). This sends the reload or compile message to the pdluax and faustgen2~ receivers, respectively, depending on which kind of file you're editing in Emacs.
+pd-remote hooks into faust-mode and lua-mode by activating the pd-remote-mode minor mode (indicated by "Pd" in the Emacs mode line) which offers some convenient keybindings, listed below. Most of these commands are also available as interactive elisp functions under the pd-remote prefix, such as pd-remote-message which can be used to send any message to Pd.
+
+The most common use for pd-remote is to tell Pd when to reload or recompile Lua and Faust objects, for which there is the keyboard shortcut C-C C-K (i.e., Ctrl+C Ctrl+K). This sends the reload or compile message to the pdluax and faustgen2~ receivers, respectively, depending on which kind of file you're editing in Emacs.
 
 - To make this work for Lua objects, some preparation is needed, as described in the [live-coding section](https://agraef.github.io/pd-lua/tutorial/pd-lua-intro.html#remote-control) of the pd-lua tutorial. For Faust programs this should work out of the box, just adding pd-remote to the patch is enough.
 
 - In either case, at present pd-remote simply reloads *all* corresponding objects, not just objects that have actually been edited. In a future version, we may hopefully be more clever about this.
 
-Both modes also offer the following special keybindings:
+Here is a complete list of the available keybindings, along with the corresponding elisp commands if available.
 
-| Keybinding | Message Sent                            |
-| ---------- | --------------------------------------- |
-| C-C C-M    | Prompts for a message to send to Pd     |
-| C-C C-Q    | Stops a running pdsend process          |
-| C-C C-S    | Start (sends a `play 1` message)        |
-| C-C C-T    | Stop (sends a `play 0` message)         |
-| C-C C-R    | Restart (sends `play 0,` then `play 1`) |
-| C-/        | DSP on (`pd dsp 1`)                     |
-| C-.        | DSP off (`pd dsp 0`)                    |
+| Keybinding | Message Sent                          | Command                |
+| ---------- | ------------------------------------- | ---------------------- |
+| C-C C-K    | Compile/Reload                        | pd-remote-compile      |
+| C-C C-M    | Prompts for a message to be sent      | pd-remote-message      |
+| C-C C-Q    | Stop pdsend                           | pd-remote-stop-process |
+| C-C C-S    | Start (`play 1`)                      |                        |
+| C-C C-T    | Stop (`play 0`)                       |                        |
+| C-C C-R    | Restart (send `play 0` then `play 1`) |                        |
+| C-/        | DSP on (`pd dsp 1`)                   | pd-remote-dsp-on       |
+| C-.        | DSP off (`pd dsp 0`)                  | pd-remote-dsp-off      |
 
-Please note that these are really just examples. You can change any of these bindings in both lua-mode and faust-mode as needed/wanted, and you can add pretty much any Pd message there, as long as it starts with a symbol for a receiver in your patch. In the same vein, you can easily add pd-remote support to any Emacs mode that you use in conjunction with Pd, as long as there is some receiver on the Pd side which processes the Pd messages you want to send.
+You can change any of these bindings in pd-remote.el as needed/wanted, and you can add pretty much any Pd message there, as long as it starts with a symbol for a receiver in your patch. In the same vein, you can also enable pd-remote-mode in any major mode that you use in conjunction with Pd, with a line like this:
 
-In fact, the DSP on/off messages are not just useful in Faust and Lua mode, so you may want to add them to your *global* keybindings, too:
+~~~lisp
+(add-hook 'foo-mode-hook 'pd-remote-mode)
+~~~
+
+In fact, it may be useful to add the DSP on/off messages to your *global* keybindings, too, so that they work everywhere:
 
 ~~~lisp
 (global-set-key [(control ?\/)] #'pd-remote-dsp-on)
@@ -106,4 +113,4 @@ You can then change the Lua script or Faust program, as described in the pd-lua 
 
 ### Using pd-remote with VS Code
 
-The same workflow can be employed with Baris' [VS Code version](https://github.com/barisssss/pdRemoteVscode) of pd-remote mentioned above which offers the same keybindings by default. In this case you'd usually want to configure VS Code as your default text editor. Emacs has a steep learning curve, so if you're not familiar with it, or just prefer a modern-style editing environment, VS Code will be the better choice.
+The same workflow can be employed with Baris' [VS Code version](https://github.com/barisssss/pdRemoteVscode) of pd-remote mentioned above which offers the same keybindings by default. In this case you'd usually want to configure VS Code as your default text editor. Emacs has a steep learning curve, so if you're not familiar with it, or just prefer a modern-style editing environment, you may find VS Code easier to use.
