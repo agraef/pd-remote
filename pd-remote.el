@@ -61,6 +61,15 @@
 ;; some convenient helpers
 
 ;;;###autoload
+(defun pd-remote-compile ()
+  "Send compile (Faust) or reload (Lua) message."
+  (interactive)
+  (cond
+   ((derived-mode-p 'faust-mode) (pd-remote-message "faustgen2~ compile"))
+   ((derived-mode-p 'lua-mode) (pd-remote-message "pdluax reload"))
+   (t (user-error "Can't compile %s buffer" (symbol-name major-mode)))))
+
+;;;###autoload
 (defun pd-remote-dsp-on ()
   "Start dsp processing."
   (interactive)
@@ -100,8 +109,7 @@
  ((not faust-mode-map)
   (setq faust-mode-map (make-sparse-keymap))
   ;; Some convenient keybindings for Faust mode.
-  (define-key faust-mode-map "\C-c\C-k" #'(lambda () "Compile" (interactive)
-					    (pd-remote-message "faustgen2~ compile")))
+  (define-key faust-mode-map "\C-c\C-k" #'pd-remote-compile)
   (pd-remote-keys faust-mode-map)))
 (add-hook 'faust-mode-hook #'(lambda () (use-local-map faust-mode-map)))
 
@@ -115,8 +123,7 @@
 (define-key lua-mode-map "\C-c\C-r" #'lua-send-region)
 ; Pd tie-in (see pd-lua tutorial)
 (pd-remote-keys lua-mode-map)
-(define-key lua-mode-map "\C-c\C-k" #'(lambda () "Reload" (interactive)
-					(pd-remote-message "pdluax reload")))
+(define-key lua-mode-map "\C-c\C-k" #'pd-remote-compile)
 
 ;; add any convenient global keybindings here
 ;(global-set-key [(control ?\/)] #'pd-remote-dsp-on)
