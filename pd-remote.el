@@ -7,7 +7,7 @@
 ;; Version: 1.2.0
 ;; Package-Requires: ((emacs "24.3") (faust-mode "0.6") (lua-mode "20210802"))
 ;; URL: https://github.com/agraef/pd-remote
-;; License: MIT
+;; SPDX-License-Identifier: MIT
 
 ;;; Commentary:
 
@@ -114,14 +114,14 @@ send messages to Pd:
 (require 'lua-mode)
 
 ;; Faust mode doesn't have a default extension, add one
-(add-to-list 'auto-mode-alist '("\\.dsp$" . faust-mode))
+(add-to-list 'auto-mode-alist '("\\.dsp\\'" . faust-mode))
 
 ;; pd-lua uses this as the extension for Lua scripts
-(add-to-list 'auto-mode-alist '("\\.pd_luax?$" . lua-mode))
+(add-to-list 'auto-mode-alist '("\\.pd_luax?\\'" . lua-mode))
 
 ;; enable our keybindings in Faust and Lua mode
-(add-hook 'faust-mode-hook 'pd-remote-mode)
-(add-hook 'lua-mode-hook 'pd-remote-mode)
+(add-hook 'faust-mode-hook #'pd-remote-mode)
+(add-hook 'lua-mode-hook #'pd-remote-mode)
 
 ;; add any convenient global keybindings here
 ;(global-set-key [(control ?\/)] #'pd-remote-dsp-on)
