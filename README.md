@@ -63,7 +63,7 @@ Here is a complete list of the available keybindings, along with the correspondi
 You can change any of these bindings in pd-remote.el as needed/wanted, and you can add pretty much any Pd message there, as long as it starts with a symbol for a receiver in your patch. In the same vein, you can also enable pd-remote-mode in any major mode that you use in conjunction with Pd, with a line like this:
 
 ~~~lisp
-(add-hook 'foo-mode-hook 'pd-remote-mode)
+(add-hook 'foo-mode-hook #'pd-remote-mode)
 ~~~
 
 In fact, it may be useful to add the DSP on/off messages to your *global* keybindings, too, so that they work everywhere:
