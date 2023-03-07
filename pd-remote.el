@@ -24,6 +24,8 @@
 ;; will find it, and load it in your .emacs as follows:
 
 ;; (require 'pd-remote)
+;; (add-hook 'faust-mode-hook #'pd-remote-mode)
+;; (add-hook 'lua-mode-hook #'pd-remote-mode)
 
 ;;; Code:
 
@@ -120,8 +122,8 @@ send messages to Pd:
 (add-to-list 'auto-mode-alist '("\\.pd_luax?\\'" . lua-mode))
 
 ;; enable our keybindings in Faust and Lua mode
-(add-hook 'faust-mode-hook #'pd-remote-mode)
-(add-hook 'lua-mode-hook #'pd-remote-mode)
+;(add-hook 'faust-mode-hook #'pd-remote-mode)
+;(add-hook 'lua-mode-hook #'pd-remote-mode)
 
 ;; add any convenient global keybindings here
 ;(global-set-key [(control ?\/)] #'pd-remote-dsp-on)

@@ -20,27 +20,22 @@ There's a pdlibbuilder-based Makefile with which you can install the abstraction
 
 The **easy** way: Install it from [MELPA](https://melpa.org/). (Submission currently pending, please check back later. For the time being, open pd-remote.el in Emacs and run (Alt+x) `package-install-from-buffer`.)
 
-The **hard** way: Copy pd-remote.el to some place on your Emacs load-path. (See the notes below if needed.)
+The **hard** way: Copy pd-remote.el to some place on your Emacs load-path, and make sure that you have both faust-mode and lua-mode installed as well.
 
-Either way, to finish the installation you need to add this line to your .emacs:
+Either way, to finish the installation you need to add these lines to your .emacs:
 
 ~~~lisp
 (require 'pd-remote)
+(add-hook 'faust-mode-hook #'pd-remote-mode)
+(add-hook 'lua-mode-hook #'pd-remote-mode)
 ~~~
 
-This also loads Faust and Lua mode and adds some convenient keybindings. (You can also change these as needed by editing your local copy of pd-remote.el.)
-
-#### Emacs newbies: Notes for manual installation
-
-If you're an Emacs novice, do yourself a favor and install the easy way, using the Emacs package manager.
-
-But if you *really* want to install manually, make sure you understand how the Emacs [load-path](https://www.emacswiki.org/emacs/LoadPath) works. You may want to put this into your .emacs so that ~/.emacs.d/lisp is searched for elisp files:
+This also loads Faust and Lua mode and enables some convenient keybindings in these modes. Alternatively, you can also omit the hooks and define a global keybinding to toggle the pd-remote-mode minor mode when you need it:
 
 ~~~lisp
-(add-to-list 'load-path "~/.emacs.d/lisp/")
+(require 'pd-remote)
+(global-set-key "\C-c\C-p" #'pd-remote-mode)
 ~~~
-
-Then create ~/.emacs.d/lisp if necessary and copy pd-remote.el to that directory. You'll also have to ensure that both lua-mode and faust-mode are installed (they're both available from MELPA).
 
 ## Usage
 
@@ -94,6 +89,8 @@ Note that changes to these will not affect a running pdsend process, so you will
 ## Troubleshooting
 
 If communication between Emacs and Pd fails to work, here are some things to watch out for:
+
+- Make sure that the "Pd" minor mode is enabled in the current Emacs buffer. This should normally be the case in faust-mode and lua-mode buffers if the appropriate hooks are defined. Otherwise the minor mode can be toggled on and off with the (Alt+x) `pd-remote-mode` command, in order to enable the pd-remote keybindings in the current buffer.
 
 - The pdsend program needs to be installed and on the PATH. This program usually accompanies the different Pd flavors but may not always be on the PATH, so you may have to either copy it to a directory on your PATH, modify your PATH accordingly, or edit the `pd-remote-pdsend` customization variable (see above) to supply the absolute path under which pdsend can be found.
 
