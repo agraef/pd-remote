@@ -18,7 +18,7 @@ There's a pdlibbuilder-based Makefile with which you can install the abstraction
 
 ### Install pd-remote.el
 
-The **easy** way: Install it from [MELPA](https://melpa.org/). (Submission currently pending, please check back later. For the time being, open pd-remote.el in Emacs and run (Alt+x) `package-install-from-buffer`.)
+The **easy** way: Install it from [MELPA](https://melpa.org/). (You can also open pd-remote.el in Emacs and run (Alt+x) `package-install-from-buffer`.)
 
 The **hard** way: Copy pd-remote.el to some place on your Emacs load-path, and make sure that you have both faust-mode and lua-mode installed as well.
 
